@@ -12,13 +12,13 @@ kotlin {
     androidTarget()
     jvm()
     listOf(
-        iosX64(),
         iosArm64(),
         iosSimulatorArm64()
     ).forEach {
         it.binaries.framework {
-            baseName = "SharedKit"
             isStatic = true
+            baseName = "SharedKit"
+            linkerOpts.add("-lsqlite3")
         }
     }
 
