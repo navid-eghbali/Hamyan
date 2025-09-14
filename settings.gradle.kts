@@ -32,8 +32,6 @@ dependencyResolutionManagement {
 rootProject.name = "Hamyan"
 include(
     ":android-app",
-    ":core:api",
     ":desktop-app",
-    ":feature:coins",
     ":shared",
 )

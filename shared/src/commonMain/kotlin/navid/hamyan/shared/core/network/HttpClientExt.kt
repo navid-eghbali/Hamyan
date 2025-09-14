@@ -1,12 +1,12 @@
-package navid.hamyan.core.api.network
+package navid.hamyan.shared.core.network
 
 import io.ktor.client.call.body
 import io.ktor.client.network.sockets.SocketTimeoutException
 import io.ktor.client.statement.HttpResponse
 import io.ktor.util.network.UnresolvedAddressException
 import kotlinx.coroutines.ensureActive
-import navid.hamyan.core.api.domain.DataError
-import navid.hamyan.core.api.domain.Result
+import navid.hamyan.shared.core.domain.DataError
+import navid.hamyan.shared.core.domain.Result
 import kotlin.coroutines.coroutineContext
 
 suspend inline fun <reified T> safeCall(
@@ -14,11 +14,11 @@ suspend inline fun <reified T> safeCall(
 ): Result<T, DataError.Remote> {
     val response = try {
         execute()
-    } catch (e: SocketTimeoutException) {
+    } catch (_: SocketTimeoutException) {
         return Result.Error(DataError.Remote.REQUEST_TIMEOUT)
-    } catch (e: UnresolvedAddressException) {
+    } catch (_: UnresolvedAddressException) {
         return Result.Error(DataError.Remote.NO_INTERNET)
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         coroutineContext.ensureActive()
         return Result.Error(DataError.Remote.UNKNOWN)
     }
@@ -30,7 +30,7 @@ suspend inline fun <reified T> responseToResult(
 ): Result<T, DataError.Remote> = when (response.status.value) {
     in 200..299 -> try {
         Result.Success(response.body())
-    } catch (e: Exception) {
+    } catch (_: Exception) {
         Result.Error(DataError.Remote.SERIALIZATION)
     }
 

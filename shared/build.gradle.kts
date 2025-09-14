@@ -1,5 +1,9 @@
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.kotlin.konan.properties.Properties
+
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.build.konfig)
     alias(libs.plugins.jetbrains.compose)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.kotlin.multiplatform)
@@ -61,6 +65,10 @@ kotlin {
         iosMain.dependencies {
             implementation(libs.ktor.client.ios)
         }
+
+        jvmMain.dependencies {
+            implementation(libs.ktor.client.okhttp)
+        }
     }
 }
 
@@ -80,4 +88,18 @@ room {
 compose.resources {
     publicResClass = true
     packageOfResClass = "navid.hamyan.shared.resources"
+}
+
+buildkonfig {
+    packageName = "navid.hamyan.shared.core"
+    defaultConfigs {
+        buildConfigField(STRING, "ACCESS_TOKEN", getApiKey())
+    }
+}
+
+private fun getApiKey(): String {
+    val propertiesFile = project.rootProject.file("api.properties")
+    val properties = Properties()
+    properties.load(propertiesFile.inputStream())
+    return properties.getProperty("COINRANKING_API_KEY")
 }

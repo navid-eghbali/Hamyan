@@ -1,4 +1,4 @@
-package navid.hamyan.core.api.domain
+package navid.hamyan.shared.core.domain
 
 sealed interface DataError : Error {
     enum class Remote : DataError {

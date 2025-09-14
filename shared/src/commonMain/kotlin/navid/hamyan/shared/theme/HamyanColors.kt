@@ -24,4 +24,4 @@ internal val DarkHamyanColorsScheme = HamyanColorsPalette(
     lossRed = LossRedDark,
 )
 
-internal val LocalHamyanColorsPalette = compositionLocalOf { HamyanColorsPalette() }
+val LocalHamyanColorsPalette = compositionLocalOf { HamyanColorsPalette() }
