@@ -31,6 +31,7 @@ kotlin {
             implementation(libs.androidx.biometric)
             implementation(libs.koin.android)
             implementation(libs.koin.androidx.compose)
+            implementation(libs.kotlinx.coroutines.android)
             implementation(libs.ktor.client.android)
         }
 
@@ -45,6 +46,7 @@ kotlin {
             implementation(libs.androidx.lifecycle.runtime.compose)
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.bundles.ktor)
+            implementation(libs.kotlinx.coroutines.core)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.room.runtime)
@@ -67,6 +69,7 @@ kotlin {
         }
 
         jvmMain.dependencies {
+            implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
         }
     }

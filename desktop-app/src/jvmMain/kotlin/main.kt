@@ -8,6 +8,7 @@ import androidx.compose.ui.window.WindowPosition
 import androidx.compose.ui.window.application
 import androidx.compose.ui.window.rememberWindowState
 import navid.hamyan.shared.App
+import navid.hamyan.shared.di.initKoin
 import navid.hamyan.shared.resources.Res
 import navid.hamyan.shared.resources.app_name
 import org.jetbrains.compose.resources.stringResource
@@ -15,6 +16,7 @@ import java.awt.Dimension
 import java.awt.Toolkit
 
 fun main() = application {
+    initKoin()
     Window(
         onCloseRequest = ::exitApplication,
         state = rememberWindowState(
