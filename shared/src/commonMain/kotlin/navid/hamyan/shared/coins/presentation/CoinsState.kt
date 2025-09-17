@@ -7,4 +7,12 @@ import org.jetbrains.compose.resources.StringResource
 data class CoinsState(
     val error: StringResource? = null,
     val coins: List<UiCoinListItem> = emptyList(),
+    val chartState: ChartState? = null,
+)
+
+@Stable
+data class ChartState(
+    val sparkLine: List<Double> = emptyList(),
+    val isLoading: Boolean = false,
+    val coinName: String = "",
 )

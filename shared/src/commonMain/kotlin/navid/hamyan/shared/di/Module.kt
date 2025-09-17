@@ -3,6 +3,7 @@ package navid.hamyan.shared.di
 import io.ktor.client.HttpClient
 import navid.hamyan.shared.coins.data.remote.impl.KtorCoinsRemoteDataSource
 import navid.hamyan.shared.coins.domain.GetCoinDetailsUseCase
+import navid.hamyan.shared.coins.domain.GetCoinPriceHistoryUseCase
 import navid.hamyan.shared.coins.domain.GetCoinsListUseCase
 import navid.hamyan.shared.coins.domain.api.CoinsRemoteDataSource
 import navid.hamyan.shared.coins.presentation.CoinsListViewModel
@@ -29,8 +30,9 @@ val sharedModule = module {
 
     single<HttpClient> { HttpClientFactory.create(get()) }
 
-    viewModel { CoinsListViewModel(get()) }
+    viewModel { CoinsListViewModel(get(), get()) }
     singleOf(::GetCoinsListUseCase)
     singleOf(::KtorCoinsRemoteDataSource).bind<CoinsRemoteDataSource>()
     singleOf(::GetCoinDetailsUseCase)
+    singleOf(::GetCoinPriceHistoryUseCase)
 }

@@ -18,8 +18,7 @@ fun App() {
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = Modifier
                 .fillMaxSize()
-                .windowInsetsPadding(WindowInsets.safeDrawing)
-            // .padding(16.dp),
+                .windowInsetsPadding(WindowInsets.safeDrawing),
         ) {
             CoinsListScreen(
                 onCoinClicked = {},
