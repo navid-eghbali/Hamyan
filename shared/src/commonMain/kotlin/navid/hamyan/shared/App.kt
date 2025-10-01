@@ -8,7 +8,7 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import navid.hamyan.shared.coins.presentation.CoinsListScreen
+import navid.hamyan.shared.portfolio.presentation.PortfolioScreen
 import navid.hamyan.shared.theme.HamyanTheme
 
 @Composable
@@ -20,9 +20,13 @@ fun App() {
                 .fillMaxSize()
                 .windowInsetsPadding(WindowInsets.safeDrawing),
         ) {
-            CoinsListScreen(
-                onCoinClicked = {},
+            PortfolioScreen(
+                onCoinItemClicked = {},
+                onDiscoverCoinsClicked = {},
             )
+            /*CoinsListScreen(
+                onCoinClicked = {},
+            )*/
         }
     }
 }

@@ -1,5 +1,6 @@
 package navid.hamyan.shared.di
 
+import androidx.room.RoomDatabase
 import io.ktor.client.HttpClient
 import navid.hamyan.shared.coins.data.remote.impl.KtorCoinsRemoteDataSource
 import navid.hamyan.shared.coins.domain.GetCoinDetailsUseCase
@@ -7,7 +8,12 @@ import navid.hamyan.shared.coins.domain.GetCoinPriceHistoryUseCase
 import navid.hamyan.shared.coins.domain.GetCoinsListUseCase
 import navid.hamyan.shared.coins.domain.api.CoinsRemoteDataSource
 import navid.hamyan.shared.coins.presentation.CoinsListViewModel
+import navid.hamyan.shared.core.database.portfolio.PortfolioDatabase
+import navid.hamyan.shared.core.database.portfolio.getPortfolioDatabase
 import navid.hamyan.shared.core.network.HttpClientFactory
+import navid.hamyan.shared.portfolio.data.PortfolioRepositoryImpl
+import navid.hamyan.shared.portfolio.domain.PortfolioRepository
+import navid.hamyan.shared.portfolio.presentation.PortfolioViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -30,9 +36,18 @@ val sharedModule = module {
 
     single<HttpClient> { HttpClientFactory.create(get()) }
 
+    single {
+        getPortfolioDatabase(get<RoomDatabase.Builder<PortfolioDatabase>>())
+    }
+    singleOf(::PortfolioRepositoryImpl).bind<PortfolioRepository>()
+    single { get<PortfolioDatabase>().portfolioDao() }
+    single { get<PortfolioDatabase>().userBalanceDao() }
+    viewModel { PortfolioViewModel(get()) }
+
     viewModel { CoinsListViewModel(get(), get()) }
     singleOf(::GetCoinsListUseCase)
     singleOf(::KtorCoinsRemoteDataSource).bind<CoinsRemoteDataSource>()
     singleOf(::GetCoinDetailsUseCase)
     singleOf(::GetCoinPriceHistoryUseCase)
+
 }

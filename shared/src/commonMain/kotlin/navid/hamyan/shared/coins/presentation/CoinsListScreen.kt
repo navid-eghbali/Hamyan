@@ -144,7 +144,7 @@ private fun CoinListItem(
             Text(
                 text = coin.symbol,
                 color = MaterialTheme.colorScheme.onBackground,
-                style = MaterialTheme.typography.bodyMedium,
+                style = MaterialTheme.typography.titleSmall,
             )
         }
         Column(
