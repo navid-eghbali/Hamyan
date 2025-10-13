@@ -14,6 +14,10 @@ import navid.hamyan.shared.core.network.HttpClientFactory
 import navid.hamyan.shared.portfolio.data.PortfolioRepositoryImpl
 import navid.hamyan.shared.portfolio.domain.PortfolioRepository
 import navid.hamyan.shared.portfolio.presentation.PortfolioViewModel
+import navid.hamyan.shared.trade.domain.BuyCoinUseCase
+import navid.hamyan.shared.trade.domain.SellCoinUseCase
+import navid.hamyan.shared.trade.presentation.buy.BuyViewModel
+import navid.hamyan.shared.trade.presentation.sell.SellViewModel
 import org.koin.core.context.startKoin
 import org.koin.core.module.Module
 import org.koin.core.module.dsl.singleOf
@@ -49,5 +53,10 @@ val sharedModule = module {
     singleOf(::KtorCoinsRemoteDataSource).bind<CoinsRemoteDataSource>()
     singleOf(::GetCoinDetailsUseCase)
     singleOf(::GetCoinPriceHistoryUseCase)
+
+    singleOf(::BuyCoinUseCase)
+    singleOf(::SellCoinUseCase)
+    viewModel { BuyViewModel(get(), get(), get()) }
+    viewModel { SellViewModel(get(), get(), get()) }
 
 }

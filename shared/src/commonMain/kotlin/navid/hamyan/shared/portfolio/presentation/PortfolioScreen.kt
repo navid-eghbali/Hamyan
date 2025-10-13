@@ -22,6 +22,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -32,7 +33,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil3.compose.AsyncImage
+import navid.hamyan.shared.theme.HamyanTheme
 import navid.hamyan.shared.theme.LocalHamyanColorsPalette
+import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
@@ -54,7 +57,7 @@ fun PortfolioScreen(
             )
         }
     } else {
-        PortfolioContent(
+        PortfolioUi(
             state = state,
             onCoinItemClicked = onCoinItemClicked,
             onDiscoverCoinsClicked = onDiscoverCoinsClicked,
@@ -63,7 +66,7 @@ fun PortfolioScreen(
 }
 
 @Composable
-fun PortfolioContent(
+fun PortfolioUi(
     state: PortfolioState,
     onCoinItemClicked: (String) -> Unit,
     onDiscoverCoinsClicked: () -> Unit,
@@ -279,6 +282,20 @@ private fun CoinListItem(
                 text = coin.performancePercentText,
                 color = if (coin.isPositive) LocalHamyanColorsPalette.current.profitGreen else LocalHamyanColorsPalette.current.lossRed,
                 style = MaterialTheme.typography.titleSmall,
+            )
+        }
+    }
+}
+
+@Preview
+@Composable
+private fun PortfolioUiPreview() {
+    HamyanTheme {
+        Surface(color = MaterialTheme.colorScheme.background) {
+            PortfolioUi(
+                state = PortfolioState(),
+                onCoinItemClicked = {},
+                onDiscoverCoinsClicked = {},
             )
         }
     }
