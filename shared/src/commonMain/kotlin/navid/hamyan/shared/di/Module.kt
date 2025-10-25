@@ -56,7 +56,7 @@ val sharedModule = module {
 
     singleOf(::BuyCoinUseCase)
     singleOf(::SellCoinUseCase)
-    viewModel { BuyViewModel(get(), get(), get()) }
-    viewModel { SellViewModel(get(), get(), get()) }
+    viewModel { (coinId: String) -> BuyViewModel(coinId, get(), get(), get()) }
+    viewModel { (coinId: String) -> SellViewModel(coinId, get(), get(), get()) }
 
 }

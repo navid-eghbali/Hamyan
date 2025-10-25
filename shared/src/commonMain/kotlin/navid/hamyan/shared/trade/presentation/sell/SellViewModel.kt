@@ -2,10 +2,12 @@ package navid.hamyan.shared.trade.presentation.sell
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -20,12 +22,12 @@ import navid.hamyan.shared.trade.presentation.common.UiTradeCoinItem
 import navid.hamyan.shared.trade.presentation.mapper.toCoin
 
 class SellViewModel(
+    private val coinId: String,
     private val portfolioRepository: PortfolioRepository,
     private val getCoinDetailsUseCase: GetCoinDetailsUseCase,
     private val sellCoinUseCase: SellCoinUseCase,
 ) : ViewModel() {
 
-    private val tempCoinId = "1"
     private val _amount = MutableStateFlow("")
     private val _state = MutableStateFlow(TradeState())
     val state = combine(
@@ -34,7 +36,7 @@ class SellViewModel(
     ) { state, amount ->
         state.copy(amount = amount)
     }.onStart {
-        when (val result = portfolioRepository.getPortfolioCoin(tempCoinId)) {
+        when (val result = portfolioRepository.getPortfolioCoin(coinId)) {
             is Result.Success -> {
                 result.data?.ownedAmountInUnit?.let {
                     getCoinDetails(it)
@@ -53,6 +55,8 @@ class SellViewModel(
         started = SharingStarted.WhileSubscribed(),
         initialValue = TradeState(isLoading = true),
     )
+    private val _events = Channel<SellEvent>(Channel.BUFFERED)
+    val events = _events.receiveAsFlow()
 
     fun onAmountChanged(amount: String) {
         _amount.update { amount }
@@ -62,14 +66,14 @@ class SellViewModel(
         val tradeCoin = _state.value.coin ?: return
         viewModelScope.launch {
             when (val result = sellCoinUseCase(coin = tradeCoin.toCoin(), amountInFiat = _amount.value.toDouble(), price = tradeCoin.price)) {
-                is Result.Success -> TODO()
+                is Result.Success -> _events.trySend(SellEvent.SellSuccess)
                 is Result.Error -> _state.update { it.copy(isLoading = false, error = result.error.toUiText()) }
             }
         }
     }
 
     private suspend fun getCoinDetails(ownedAmountInUnit: Double) {
-        when (val result = getCoinDetailsUseCase(tempCoinId)) {
+        when (val result = getCoinDetailsUseCase(coinId)) {
             is Result.Success -> {
                 val availableAmountInFiat = result.data.price * ownedAmountInUnit
                 _state.update {
@@ -94,5 +98,9 @@ class SellViewModel(
                 )
             }
         }
+    }
+
+    sealed interface SellEvent {
+        data object SellSuccess : SellEvent
     }
 }
