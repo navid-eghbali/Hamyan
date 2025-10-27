@@ -1,4 +1,7 @@
+@file:OptIn(ExperimentalComposeLibrary::class)
+
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
+import org.jetbrains.compose.ExperimentalComposeLibrary
 import org.jetbrains.kotlin.konan.properties.Properties
 
 plugins {
@@ -71,6 +74,14 @@ kotlin {
         jvmMain.dependencies {
             implementation(libs.kotlinx.coroutines.swing)
             implementation(libs.ktor.client.okhttp)
+        }
+
+        commonTest.dependencies {
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotlin.test)
+            implementation(libs.test.turbine)
+            implementation(libs.test.assertk)
+            implementation(compose.uiTest)
         }
     }
 }

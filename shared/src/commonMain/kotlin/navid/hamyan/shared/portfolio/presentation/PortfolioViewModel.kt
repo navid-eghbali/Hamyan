@@ -2,10 +2,13 @@ package navid.hamyan.shared.portfolio.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onStart
 import kotlinx.coroutines.flow.stateIn
 import navid.hamyan.shared.core.domain.DataError
@@ -19,6 +22,7 @@ import navid.hamyan.shared.portfolio.domain.PortfolioRepository
 
 class PortfolioViewModel(
     private val portfolioRepository: PortfolioRepository,
+    private val coroutineDispatcher: CoroutineDispatcher = Dispatchers.Default,
 ) : ViewModel() {
 
     private val _state = MutableStateFlow(PortfolioState(isLoading = true))
@@ -43,7 +47,7 @@ class PortfolioViewModel(
         }
     }.onStart {
         portfolioRepository.initializeBalance()
-    }.stateIn(
+    }.flowOn(coroutineDispatcher).stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5000),
         initialValue = PortfolioState(isLoading = true),
