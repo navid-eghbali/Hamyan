@@ -33,6 +33,7 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.SolidColor
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextAlign
@@ -85,7 +86,9 @@ fun TradeScreen(
                     text = state.coin?.name ?: "",
                     color = MaterialTheme.colorScheme.onBackground,
                     style = MaterialTheme.typography.labelMedium,
-                    modifier = Modifier.padding(4.dp),
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .testTag("trade_screen_coin_name"),
                 )
             }
             Text(
@@ -111,7 +114,9 @@ fun TradeScreen(
                     text = stringResource(state.error),
                     color = LocalHamyanColorsPalette.current.lossRed,
                     style = MaterialTheme.typography.labelLarge,
-                    modifier = Modifier.padding(4.dp),
+                    modifier = Modifier
+                        .padding(4.dp)
+                        .testTag("trade_screen_error_text"),
                 )
             }
         }
